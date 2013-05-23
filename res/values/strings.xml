@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Leitor iPostal</string>
+    <string name="app_description">Aplicativo que dá vida aos cartões do iPostal para o Dia dos Namorados.</string>
+    <string name="startup_description">Para dar vida ao seu iPostal basta apontar a câmera para ele.\n\n.</string>
+    <string name="startup_button">OK</string>
+    <string name="background_view_img">Background view image</string>
+</resources>
