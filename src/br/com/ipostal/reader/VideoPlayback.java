@@ -38,6 +38,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,7 +53,6 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 import br.com.ipostal.reader.VideoPlayerHelper.MEDIA_STATE;
 
@@ -115,6 +115,7 @@ public class VideoPlayback extends Activity
     // The StartupScreen view and the start button:
     private View mStartupView                           = null;
     private ImageView mStartButton                      = null;
+    private ImageView mDownloadButton                   = null;
     private boolean mStartScreenShowing                 = false;
 
     // The view to display the sample splash screen:
@@ -899,38 +900,6 @@ public class VideoPlayback extends Activity
                 LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
 
-        // Align and center the background container for the description:
-        ImageView background_view = (ImageView) findViewById(
-            R.id.background_view);
-
-        if (background_view != null)
-        {
-            int paddingHeight = (int) (mScreenHeight*0.10);
-            background_view.setPadding(0, paddingHeight, 0, paddingHeight);
-            background_view.getLayoutParams().height=(int) (mScreenHeight*0.80);
-        }
-
-        // Align and pad the text
-        TextView description_text = (TextView)findViewById(
-            R.id.description_text);
-
-        if (description_text != null)
-        {
-            int paddingWidth = (int) (mScreenWidth*0.10);
-            int paddingHeight = (int) (mScreenHeight*0.10);
-            description_text.setPadding(paddingWidth, paddingHeight*2, 
-                paddingWidth, paddingHeight);
-            description_text.getLayoutParams().height=(int)(mScreenHeight*0.75);
-        }
-
-        // Align and center the background container for the description:
-        ImageView start_button = (ImageView) findViewById(R.id.start_button);
-        if (start_button != null)
-        {
-            int paddingWidth = (int) (mScreenWidth*0.05);
-            int paddingHeight = (int) (mScreenHeight*0.10);
-            start_button.setPadding(0, 0, paddingWidth, paddingHeight);
-        }
 
         mStartScreenShowing = true;
     }
@@ -938,7 +907,8 @@ public class VideoPlayback extends Activity
     /** This call sets the start button variable up */
     private void setupStartButton()
     {
-        mStartButton = (ImageView) findViewById(R.id.start_button);
+        mStartButton = (ImageView) findViewById(R.id.startButton);
+        mDownloadButton = (ImageView) findViewById(R.id.downloadButton);
 
         if (mStartButton != null)
         {
@@ -946,6 +916,22 @@ public class VideoPlayback extends Activity
             mStartButton.setOnClickListener(new ImageView.OnClickListener() {
                     public void onClick(View arg0) {
                         hideStartupScreen();
+                    }
+            });
+        }
+        
+        if (mDownloadButton != null)
+        {
+            // Setup a click listener that hides the StartupScreen:
+        	mDownloadButton.setOnClickListener(new ImageView.OnClickListener() {
+                    public void onClick(View arg0) {
+                        // TODO: Download iPostal from GooglePlay
+                    	final String appName = "iPostal";
+                    	try {
+                    	    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+appName)));
+                    	} catch (android.content.ActivityNotFoundException anfe) {
+                    	    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id="+appName)));
+                    	}
                     }
             });
         }
