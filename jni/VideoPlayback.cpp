@@ -1,6 +1,7 @@
 /*==============================================================================
             Copyright (c) 2012-2013 QUALCOMM Austria Research Center GmbH.
             All Rights Reserved.
+            
             Qualcomm Confidential and Proprietary
 
 This  Vuforia(TM) sample application in source code form ("Sample Code") for the
@@ -78,12 +79,14 @@ enum MEDIA_STATE {
     ERROR                               =  6
 };
 
-static const int NUM_TARGETS = 5;
+static const int NUM_TARGETS = 7;
 static const int OVER_THE_RAINBOW = 0;
 static const int BETTER_TOGETHER = 1;
 static const int ALL_YOU_NEED = 2;
 static const int STOPMOTION = 3;
 static const int LORO = 4;
+static const int HAPPY_FATHERS_DAY = 5;
+static const int SUPER_HERO = 6;
 
 MEDIA_STATE currentStatus[NUM_TARGETS];
 
@@ -140,6 +143,18 @@ GLfloat videoQuadTextureCoordsTransformedStopmotion[] = {
     0.0f, 1.0f,
 };
 GLfloat videoQuadTextureCoordsTransformedLoro[] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f,
+};
+GLfloat videoQuadTextureCoordsTransformedHappyFathersDay[] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f,
+};
+GLfloat videoQuadTextureCoordsTransformedSuperHero[] = {
     0.0f, 0.0f,
     1.0f, 0.0f,
     1.0f, 1.0f,
@@ -408,6 +423,16 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_setVideoDimensions(JNIEnv *env,
         uvMultMat4f(videoQuadTextureCoordsTransformedLoro[2], videoQuadTextureCoordsTransformedLoro[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedLoro[4], videoQuadTextureCoordsTransformedLoro[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedLoro[6], videoQuadTextureCoordsTransformedLoro[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
+    } else if (target == HAPPY_FATHERS_DAY) {
+        uvMultMat4f(videoQuadTextureCoordsTransformedHappyFathersDay[0], videoQuadTextureCoordsTransformedHappyFathersDay[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedHappyFathersDay[2], videoQuadTextureCoordsTransformedHappyFathersDay[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedHappyFathersDay[4], videoQuadTextureCoordsTransformedHappyFathersDay[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedHappyFathersDay[6], videoQuadTextureCoordsTransformedHappyFathersDay[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
+    } else if (target == SUPER_HERO) {
+        uvMultMat4f(videoQuadTextureCoordsTransformedSuperHero[0], videoQuadTextureCoordsTransformedSuperHero[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedSuperHero[2], videoQuadTextureCoordsTransformedSuperHero[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedSuperHero[4], videoQuadTextureCoordsTransformedSuperHero[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedSuperHero[6], videoQuadTextureCoordsTransformedSuperHero[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
     }
 
     env->ReleaseFloatArrayElements(textureCoordMatrix, mtx, 0);
@@ -474,6 +499,10 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             currentTarget=STOPMOTION;
         else if (strcmp(imageTarget.getName(), "Loro") == 0)
             currentTarget=LORO;
+        else if (strcmp(imageTarget.getName(), "happy_fathers_day") == 0)
+            currentTarget=HAPPY_FATHERS_DAY;
+        else if (strcmp(imageTarget.getName(), "super_hero") == 0)
+            currentTarget=SUPER_HERO;
 
         modelViewMatrix[currentTarget] = QCAR::Tool::convertPose2GLMatrix(trackableResult->getPose());
 
@@ -587,6 +616,12 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             else if (strcmp(imageTarget.getName(), "Loro") == 0)
                 glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
                                   (const GLvoid*) &videoQuadTextureCoordsTransformedLoro[0]);
+            else if (strcmp(imageTarget.getName(), "happy_fathers_day") == 0)
+                glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
+                                  (const GLvoid*) &videoQuadTextureCoordsTransformedHappyFathersDay[0]);
+        	else if (strcmp(imageTarget.getName(), "super_hero") == 0)
+                glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
+                                  (const GLvoid*) &videoQuadTextureCoordsTransformedSuperHero[0]);
 
 
             glEnableVertexAttribArray(videoPlaybackVertexHandle);
@@ -672,22 +707,22 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             switch (currentStatus[currentTarget])
             {
                 case READY:
-                    glBindTexture(GL_TEXTURE_2D, textures[5]->mTextureID);
-                    break;
-                case REACHED_END:
-                    glBindTexture(GL_TEXTURE_2D, textures[5]->mTextureID);
-                    break;
-                case PAUSED:
-                    glBindTexture(GL_TEXTURE_2D, textures[5]->mTextureID);
-                    break;
-                case NOT_READY:
-                    glBindTexture(GL_TEXTURE_2D, textures[6]->mTextureID);
-                    break;
-                case ERROR:
                     glBindTexture(GL_TEXTURE_2D, textures[7]->mTextureID);
                     break;
+                case REACHED_END:
+                    glBindTexture(GL_TEXTURE_2D, textures[7]->mTextureID);
+                    break;
+                case PAUSED:
+                    glBindTexture(GL_TEXTURE_2D, textures[7]->mTextureID);
+                    break;
+                case NOT_READY:
+                    glBindTexture(GL_TEXTURE_2D, textures[8]->mTextureID);
+                    break;
+                case ERROR:
+                    glBindTexture(GL_TEXTURE_2D, textures[9]->mTextureID);
+                    break;
                 default:
-                    glBindTexture(GL_TEXTURE_2D, textures[6]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[8]->mTextureID);
                     break;
             }
             glUniformMatrix4fv(keyframeMVPMatrixHandle, 1, GL_FALSE,
@@ -1026,6 +1061,8 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_initRendering(
     keyframeQuadAspectRatio[ALL_YOU_NEED] = (float)textures[2]->mHeight / (float)textures[2]->mWidth;
     keyframeQuadAspectRatio[STOPMOTION] = (float)textures[3]->mHeight / (float)textures[3]->mWidth;
     keyframeQuadAspectRatio[LORO] = (float)textures[4]->mHeight / (float)textures[4]->mWidth;
+    keyframeQuadAspectRatio[HAPPY_FATHERS_DAY] = (float)textures[5]->mHeight / (float)textures[5]->mWidth;
+    keyframeQuadAspectRatio[SUPER_HERO] = (float)textures[6]->mHeight / (float)textures[6]->mWidth;
 
 }
 

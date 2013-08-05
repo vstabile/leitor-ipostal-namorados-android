@@ -123,12 +123,14 @@ public class VideoPlayback extends Activity
     private Activity mCurrentActivity                   = null;
 
     // Movie for the Targets:
-    public static final int NUM_TARGETS                 = 5;
+    public static final int NUM_TARGETS                 = 7;
     public static final int OVER_THE_RAINBOW            = 0;
     public static final int BETTER_TOGETHER             = 1;
     public static final int ALL_YOU_NEED                = 2;
     public static final int STOPMOTION                  = 3;
     public static final int LORO                  		= 4;
+    public static final int HAPPY_FATHERS_DAY     		= 5;
+    public static final int SUPER_HERO           		= 6;
     private VideoPlayerHelper mVideoPlayerHelper[]      = null;
     private int mSeekPosition[]                         = null;
     private boolean mWasPlaying[]                       = null;
@@ -404,6 +406,8 @@ public class VideoPlayback extends Activity
         mMovieName[ALL_YOU_NEED] = "all_you_need.mp4";
         mMovieName[STOPMOTION] = "stopmotion.mp4";
         mMovieName[LORO] = "loro.mp4";
+        mMovieName[HAPPY_FATHERS_DAY] = "happy_fathers_day.mp4";
+        mMovieName[SUPER_HERO] = "super_hero.mp4";
 
         mCurrentActivity = this;
 
@@ -436,6 +440,12 @@ public class VideoPlayback extends Activity
 						break;
                     case 4:
 						fileName = "loro.mp4";
+						break;
+                    case 5:
+						fileName = "happy_fathers_day.mp4";
+						break;
+                    case 6:
+						fileName = "super_hero.mp4";
 						break;
 
 					default:
@@ -520,6 +530,13 @@ public class VideoPlayback extends Activity
                         case 4:
 							fileName = "loro.mp4";
 							break;
+                        case 5:
+    						fileName = "happy_fathers_day.mp4";
+    						break;
+                        case 6:
+    						fileName = "super_hero.mp4";
+    						break;
+
 
 						default:
 							break;
@@ -787,6 +804,10 @@ public class VideoPlayback extends Activity
     	mTextures.add(Texture.loadTextureFromApk("stopmotion.png",
                 getAssets()));
     	mTextures.add(Texture.loadTextureFromApk("loro.png",
+                getAssets()));
+    	mTextures.add(Texture.loadTextureFromApk("happy_fathers_day.png",
+                getAssets()));
+    	mTextures.add(Texture.loadTextureFromApk("super_hero.png",
                 getAssets()));
         mTextures.add(Texture.loadTextureFromApk("play.png",
                 getAssets()));
