@@ -30,19 +30,27 @@ then you may not retain or use any of the Sample Code in any manner.
 
 package br.com.ipostal.reader;
 
+import java.io.File;
 import java.util.Vector;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -55,7 +63,14 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 import br.com.ipostal.reader.VideoPlayerHelper.MEDIA_STATE;
+import br.com.ipostal.reader.VideoPlayerHelper.MEDIA_TYPE;
 
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.ProgressEvent;
+import com.amazonaws.services.s3.model.ProgressListener;
 import com.qualcomm.QCAR.QCAR;
 
 /** The AR activity for the VideoPlayback sample. */
@@ -68,6 +83,18 @@ public class VideoPlayback extends Activity
         "Deactivate Cont. Auto Focus";
     private static final String MENU_ITEM_TRIGGER_AUTO_FOCUS = 
     		"Trigger Auto Focus";
+    
+    // SDCard location
+    public static final String sdCardDir = Environment.getExternalStorageDirectory().toString() + "/iPostal";
+    
+    // Progress Dialog
+    private ProgressDialog progressBar, progressDialog;
+    
+    // ProgressBar Handler
+    private Handler progressBarHandler = new Handler();
+ 
+    // Progress dialog type (0 - for Horizontal progress bar)
+    public static final int progress_bar_type = 0; 
     
 	// Focus mode constants:
     private static final int FOCUS_MODE_NORMAL = 0;
@@ -96,11 +123,12 @@ public class VideoPlayback extends Activity
     private Activity mCurrentActivity                   = null;
 
     // Movie for the Targets:
-    public static final int NUM_TARGETS                 = 4;
+    public static final int NUM_TARGETS                 = 5;
     public static final int OVER_THE_RAINBOW            = 0;
     public static final int BETTER_TOGETHER             = 1;
     public static final int ALL_YOU_NEED                = 2;
     public static final int STOPMOTION                  = 3;
+    public static final int LORO                  		= 4;
     private VideoPlayerHelper mVideoPlayerHelper[]      = null;
     private int mSeekPosition[]                         = null;
     private boolean mWasPlaying[]                       = null;
@@ -375,6 +403,7 @@ public class VideoPlayback extends Activity
         mMovieName[BETTER_TOGETHER] = "better_together.mp4";
         mMovieName[ALL_YOU_NEED] = "all_you_need.mp4";
         mMovieName[STOPMOTION] = "stopmotion.mp4";
+        mMovieName[LORO] = "loro.mp4";
 
         mCurrentActivity = this;
 
@@ -390,17 +419,57 @@ public class VideoPlayback extends Activity
 
                 for (int i = 0; i < NUM_TARGETS; i++)
                 {
+                	// TODO
+                    String fileName = null;
+                    switch (i) {
+                    case 0:
+						fileName = "over_the_rainbow.mp4";
+						break;
+                    case 1:
+						fileName = "better_together.mp4";
+						break;
+                    case 2:
+						fileName = "all_you_need.mp4";
+						break;
+                    case 3:
+						fileName = "stopmotion.mp4";
+						break;
+                    case 4:
+						fileName = "loro.mp4";
+						break;
+
+					default:
+						break;
+					}
+                	
                     // Verify that the tap happens inside the target:
                     if (isTapOnScreenInsideTarget(i, e.getX(), e.getY()))
                     {
                         // Check whether we can play full screen at all:
                         if (mVideoPlayerHelper[i].isPlayableFullscreen())
                         {
+                        	Log.d("tap", "doubletap");
+                        	
                             // Pause all other media:
                             pauseAll(i);
 
-                            // Request the playback in fullscreen:
-                            mVideoPlayerHelper[i].play(true,VideoPlayerHelper.CURRENT_POSITION);
+                            File file = new File(sdCardDir, fileName);
+                            if (file.exists()) {
+                            	// Request the playback in fullscreen:
+                            	mVideoPlayerHelper[i].play(true,VideoPlayerHelper.CURRENT_POSITION);
+                            } else {
+                            	// Starta a DownloadActivity
+                            	if (!isOnline(getApplicationContext())) {
+                            		Toast.makeText(getApplicationContext(), getString(R.string.toast_no_connection), Toast.LENGTH_SHORT).show();
+                            	} else {
+	                            	Intent intent = new Intent(VideoPlayback.this, DownloadActivity.class);
+	                            	intent.putExtra("fileName", fileName);
+	                            	intent.putExtra("i", i);
+	//                            	startActivity(intent);
+	                            	startActivityForResult(intent, 2);
+	                            	overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                            	}
+                            }
                         }
 
                         // Even though multiple videos can be loaded only one 
@@ -432,8 +501,36 @@ public class VideoPlayback extends Activity
                     // Verify that the tap happened inside the target
                     if (isTapOnScreenInsideTarget(i, e.getX(), e.getY()))
                     {
+                    	
+                    	// TODO
+                        String fileName = null;
+                        switch (i) {
+                        case 0:
+							fileName = "over_the_rainbow.mp4";
+							break;
+                        case 1:
+							fileName = "better_together.mp4";
+							break;
+                        case 2:
+							fileName = "all_you_need.mp4";
+							break;
+                        case 3:
+							fileName = "stopmotion.mp4";
+							break;
+                        case 4:
+							fileName = "loro.mp4";
+							break;
+
+						default:
+							break;
+						}
+                    	
                         // Check if it is playable on texture
-                        if (mVideoPlayerHelper[i].isPlayableOnTexture())
+                        // TODO
+//                      if (mVideoPlayerHelper[i].isPlayableOnTexture())
+                    	if ((mVideoPlayerHelper[i].isPlayableOnTexture() || mVideoPlayerHelper[i].getStatus() == MEDIA_STATE.READY)
+                    			&& mVideoPlayerHelper[i].getMediaType() != MEDIA_TYPE.FULLSCREEN)
+                        	 
                         {
                             // We can play only if the movie was paused, ready or stopped
                             if ((mVideoPlayerHelper[i].getStatus() == MEDIA_STATE.PAUSED) ||
@@ -448,8 +545,32 @@ public class VideoPlayback extends Activity
                                 if ((mVideoPlayerHelper[i].getStatus() == MEDIA_STATE.REACHED_END))
                                     mSeekPosition[i] = 0;
 
-                                mVideoPlayerHelper[i].play(false, mSeekPosition[i]);
-                                mSeekPosition[i] = VideoPlayerHelper.CURRENT_POSITION;
+                                // tries to load video from sdCard
+                                try {
+//                                	mVideoPlayerHelper[i].unload();
+                                    
+                                	Log.d("tap", "singletap texture");
+                                	
+                                    File file = new File(sdCardDir, fileName);
+                                    if (file.exists()) {
+//                                  	mVideoPlayerHelper[i].load( mMovieName[i], MEDIA_TYPE.ON_TEXTURE, true, 0);
+                                    	mVideoPlayerHelper[i].play(false,VideoPlayerHelper.CURRENT_POSITION);
+                                    } else {
+                                    	if (!isOnline(getApplicationContext())) {
+                                    		Toast.makeText(getApplicationContext(), getString(R.string.toast_no_connection), Toast.LENGTH_SHORT).show();
+                                    	} else {
+	                                    	// Starta a DownloadActivity
+	                                    	Intent intent = new Intent(VideoPlayback.this, DownloadActivity.class);
+	                                    	intent.putExtra("fileName", fileName);
+	                                    	intent.putExtra("i", i);
+//	                                    	startActivity(intent);
+	                                    	startActivityForResult(intent, 2);
+	                                    	overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                                    	}
+                                    }
+                                } catch (Exception ex) {
+                                  ex.printStackTrace();                               
+                                }
                             }
                             else if (mVideoPlayerHelper[i].getStatus() == MEDIA_STATE.PLAYING)
                             {
@@ -459,10 +580,39 @@ public class VideoPlayback extends Activity
                         }
                         else if (mVideoPlayerHelper[i].isPlayableFullscreen())
                         {
+                        	Log.d("tap", "singletap fullscreen");
+                        	
+                        	 // tries to load video from sdCard
+                            try {
+//                            	mVideoPlayerHelper[i].unload();
+                                
+                                File file = new File(sdCardDir, fileName);
+                                if (file.exists()) {
+                                	// TODO
+                                	// Request the playback in fullscreen:
+                                    mVideoPlayerHelper[i].play(true,VideoPlayerHelper.CURRENT_POSITION);
+//                             		mVideoPlayerHelper[i].load( mMovieName[i], MEDIA_TYPE.ON_TEXTURE_FULLSCREEN, true, 0);
+                                } else {
+                                	// Starta a DownloadActivity
+                                	if (!isOnline(getApplicationContext())) {
+                                		Toast.makeText(getApplicationContext(), getString(R.string.toast_no_connection), Toast.LENGTH_SHORT).show();
+                                	} else {
+	                                	Intent intent = new Intent(VideoPlayback.this, DownloadActivity.class);
+	                                	intent.putExtra("fileName", fileName);
+	                                	intent.putExtra("i", i);
+//	                                	startActivity(intent);
+	                                	startActivityForResult(intent, 2);
+	                                	overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                                	}
+                                }
+                            } catch (Exception ex) {
+                              ex.printStackTrace();                               
+                            }
+                        	
                             // If it isn't playable on texture
                             // Either because it wasn't requested or because it
                             // isn't supported then request playback fullscreen.
-                            mVideoPlayerHelper[i].play(true,VideoPlayerHelper.CURRENT_POSITION);
+//                            mVideoPlayerHelper[i].play(true,VideoPlayerHelper.CURRENT_POSITION);
                         }
 
                         // Even though multiple videos can be loaded only one 
@@ -477,6 +627,151 @@ public class VideoPlayback extends Activity
             }
         });
     }
+    
+    private void getVideoFromAmazon(final String fileName, final int i){
+		
+		new AsyncTask<Void, Void, Boolean>() {
+			
+			protected void onPreExecute() {		
+				progressBar = new ProgressDialog(VideoPlayback.this);
+	            progressBar.setMessage(getString(R.string.downloading_video));
+	            progressBar.setIndeterminate(false);
+	            progressBar.setMax(100);
+	            progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+	            progressBar.setCancelable(true);
+	            progressBar.show();
+	            	            
+	            WindowManager.LayoutParams lp = progressBar.getWindow().getAttributes();  
+	            lp.dimAmount = 1.0f; // Dim level. 0.0 - no dim, 1.0 - completely opaque
+	            progressBar.getWindow().setAttributes(lp);
+	            	           
+	            Handler handler = new Handler(); 
+	            handler.postDelayed(new Runnable() { 
+	                 public void run() { 
+	                	 mRenderer.mIsDownloading = true;
+	                 } 
+	            }, 2000); 
+			}
+			
+			@Override
+			protected Boolean doInBackground(Void... params) {
+				Boolean success = false;
+				try {
+					  
+              	  AmazonS3Client s3Client = new AmazonS3Client(new BasicAWSCredentials(
+            				Constants.AWS_ACCESS_KEY_ID, Constants.AWS_SECRET_ACCESS_KEY));
+              	  s3Client.setEndpoint(Constants.AWS_ENDPOINT);
+              	  
+              	  Log.d("fileName", fileName);
+              	  File dir = new File(sdCardDir); 
+              	  dir.mkdirs();
+              	  File file = new File(sdCardDir, fileName); 
+            	  file.createNewFile();
+            	  
+            	// Zera a progressBar
+   				  progressBarHandler.post(new Runnable() {
+   					public void run() {
+   						progressBar.setProgress(0);
+   					}
+				  });
+            	  
+            	  ProgressListener listener = new ProgressListener() {
+              		  float total = 0;
+              		  float progress = 0;
+              		  
+				      @Override
+				      public void progressChanged(ProgressEvent pv) {
+				    	  total += (int) pv.getBytesTransfered();
+				    	  // o 140000 é o total de bytes do arquivo hardcoded
+		                     progress = (total / 140000) * 100;
+		                     
+		                     // Update the progress bar
+			   				  progressBarHandler.post(new Runnable() {
+			   					public void run() {
+			   						Log.d("PROGRESS", String.valueOf(progress));
+			   						progressBar.setProgress((int) progress);
+			   					}
+							  });
+				      }
+				
+				  };
+            	  
+            	  GetObjectRequest objReq = new GetObjectRequest(Constants.AWS_PICTURE_BUCKET,
+                			"production/" + fileName);
+            	  
+            	  objReq.setProgressListener(listener);
+              	  
+            	  ObjectMetadata object = s3Client.getObject(objReq, file);
+            	  
+//            	  S3Object object = s3Client.getObject(new GetObjectRequest(Constants.AWS_PICTURE_BUCKET,
+//                			"production/" + fileName));
+              	  
+              	  success = true;
+              	  
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				return success;
+			}
+			
+			protected void onPostExecute(Boolean success) {
+//				progressBar.dismiss();		
+				
+				mRenderer.mIsDownloading = false;
+				
+				if (progressBar != null)
+				{
+					progressBar.dismiss();
+					progressBar = null;
+				}
+				
+				if (success) {
+					Log.d("DOWNLOAD AWS", "success");
+					mVideoPlayerHelper[i].load( mMovieName[i], MEDIA_TYPE.ON_TEXTURE, true, 0);
+				} else {
+					Log.d("DOWNLOAD AWS", "fail");
+					mVideoPlayerHelper[i].load( mMovieName[i], MEDIA_TYPE.ON_TEXTURE, true, 0);
+				}
+			}
+			
+		}.execute();
+		
+	}
+    
+        /**
+         * Updating progress bar
+         * */
+        protected void onProgressUpdate(String... progress) {
+            // setting progress percentage
+//            pDialog.setProgress(Integer.parseInt(progress[0]));
+       }
+         
+    /**
+     * Showing Dialog
+     * */
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+        case progress_bar_type:
+            progressBar = new ProgressDialog(this);
+            progressBar.setMessage("Downloading file. Please wait...");
+            progressBar.setIndeterminate(false);
+            progressBar.setMax(100);
+            progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressBar.setCancelable(false);
+            progressBar.show();
+            return progressBar;
+        case 1:
+        	progressDialog = new ProgressDialog(this);
+        	progressDialog.setMessage("Downloading...");
+        	progressDialog.setCancelable(false);
+        	progressDialog.show();
+            return progressDialog;
+        default:
+            return null;
+        }
+    }
 
 
     /** We want to load specific textures from the APK, which we will later
@@ -490,6 +785,8 @@ public class VideoPlayback extends Activity
     	mTextures.add(Texture.loadTextureFromApk("all_you_need.png",
                 getAssets()));
     	mTextures.add(Texture.loadTextureFromApk("stopmotion.png",
+                getAssets()));
+    	mTextures.add(Texture.loadTextureFromApk("loro.png",
                 getAssets()));
         mTextures.add(Texture.loadTextureFromApk("play.png",
                 getAssets()));
@@ -603,6 +900,12 @@ public class VideoPlayback extends Activity
                     }
                 }
             }
+        }
+        if (requestCode == 2){
+        	if (resultCode == RESULT_OK) {
+        		hideStartupScreen();
+        		mReturningFromFullScreen = true;
+        	}
         }
     }
 
@@ -922,10 +1225,9 @@ public class VideoPlayback extends Activity
         
         if (mDownloadButton != null)
         {
-            // Setup a click listener that hides the StartupScreen:
+            // Setup a click listener that downloads iPostal
         	mDownloadButton.setOnClickListener(new ImageView.OnClickListener() {
                     public void onClick(View arg0) {
-                        // TODO: Download iPostal from GooglePlay
                     	final String appName = "iPostal";
                     	try {
                     	    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+appName)));
@@ -1001,7 +1303,7 @@ public class VideoPlayback extends Activity
     }
 
 
-    /** Tells native code whether we are in portait or landscape mode */
+    /** Tells native code whether we are in portrait or landscape mode */
     private native void setActivityPortraitMode(boolean isPortrait);
 
 
@@ -1191,4 +1493,15 @@ public class VideoPlayback extends Activity
     {
         return mGestureDetector.onTouchEvent(event);
     }
+    
+    public static boolean isOnline(Context context) {
+	    ConnectivityManager cm =
+	        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	    if (netInfo != null && netInfo.isConnected()) {
+	        return true;
+	    }
+	    return false;
+	}
+    
 }

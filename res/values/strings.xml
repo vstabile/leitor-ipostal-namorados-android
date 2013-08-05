@@ -5,4 +5,7 @@
     <string name="startup_description">Para dar vida ao seu iPostal basta apontar a câmera para ele.\n\n.</string>
     <string name="startup_button">OK</string>
     <string name="background_view_img">Background view image</string>
+    <string name="downloading_video">Baixando o vídeo&#8230;</string>
+    <string name="toast_no_connection">Verifique sua conexão</string>
+    
 </resources>

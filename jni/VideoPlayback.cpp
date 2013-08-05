@@ -78,11 +78,12 @@ enum MEDIA_STATE {
     ERROR                               =  6
 };
 
-static const int NUM_TARGETS = 4;
+static const int NUM_TARGETS = 5;
 static const int OVER_THE_RAINBOW = 0;
 static const int BETTER_TOGETHER = 1;
 static const int ALL_YOU_NEED = 2;
 static const int STOPMOTION = 3;
+static const int LORO = 4;
 
 MEDIA_STATE currentStatus[NUM_TARGETS];
 
@@ -133,6 +134,12 @@ GLfloat videoQuadTextureCoordsTransformedAllYouNeed[] = {
     0.0f, 1.0f,
 };
 GLfloat videoQuadTextureCoordsTransformedStopmotion[] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f,
+};
+GLfloat videoQuadTextureCoordsTransformedLoro[] = {
     0.0f, 0.0f,
     1.0f, 0.0f,
     1.0f, 1.0f,
@@ -243,7 +250,7 @@ Java_br_com_ipostal_reader_VideoPlayback_loadTrackerData(JNIEnv *, jobject)
     }
 
     // Load the data sets:
-    if (!dataSet->load("ipostal_namorados_2013.xml", QCAR::DataSet::STORAGE_APPRESOURCE))
+    if (!dataSet->load("iPostal.xml", QCAR::DataSet::STORAGE_APPRESOURCE))
     {
         LOG("Failed to load data set.");
         return 0;
@@ -396,6 +403,11 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_setVideoDimensions(JNIEnv *env,
         uvMultMat4f(videoQuadTextureCoordsTransformedStopmotion[2], videoQuadTextureCoordsTransformedStopmotion[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedStopmotion[4], videoQuadTextureCoordsTransformedStopmotion[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedStopmotion[6], videoQuadTextureCoordsTransformedStopmotion[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
+    } else if (target == LORO) {
+        uvMultMat4f(videoQuadTextureCoordsTransformedLoro[0], videoQuadTextureCoordsTransformedLoro[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedLoro[2], videoQuadTextureCoordsTransformedLoro[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedLoro[4], videoQuadTextureCoordsTransformedLoro[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedLoro[6], videoQuadTextureCoordsTransformedLoro[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
     }
 
     env->ReleaseFloatArrayElements(textureCoordMatrix, mtx, 0);
@@ -460,6 +472,8 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             currentTarget=BETTER_TOGETHER;
         else if (strcmp(imageTarget.getName(), "stopmotion") == 0)
             currentTarget=STOPMOTION;
+        else if (strcmp(imageTarget.getName(), "Loro") == 0)
+            currentTarget=LORO;
 
         modelViewMatrix[currentTarget] = QCAR::Tool::convertPose2GLMatrix(trackableResult->getPose());
 
@@ -570,6 +584,9 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             else if (strcmp(imageTarget.getName(), "stopmotion") == 0)
                 glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
                                   (const GLvoid*) &videoQuadTextureCoordsTransformedStopmotion[0]);
+            else if (strcmp(imageTarget.getName(), "Loro") == 0)
+                glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
+                                  (const GLvoid*) &videoQuadTextureCoordsTransformedLoro[0]);
 
 
             glEnableVertexAttribArray(videoPlaybackVertexHandle);
@@ -655,22 +672,22 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             switch (currentStatus[currentTarget])
             {
                 case READY:
-                    glBindTexture(GL_TEXTURE_2D, textures[4]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[5]->mTextureID);
                     break;
                 case REACHED_END:
-                    glBindTexture(GL_TEXTURE_2D, textures[4]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[5]->mTextureID);
                     break;
                 case PAUSED:
-                    glBindTexture(GL_TEXTURE_2D, textures[4]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[5]->mTextureID);
                     break;
                 case NOT_READY:
-                    glBindTexture(GL_TEXTURE_2D, textures[5]->mTextureID);
-                    break;
-                case ERROR:
                     glBindTexture(GL_TEXTURE_2D, textures[6]->mTextureID);
                     break;
+                case ERROR:
+                    glBindTexture(GL_TEXTURE_2D, textures[7]->mTextureID);
+                    break;
                 default:
-                    glBindTexture(GL_TEXTURE_2D, textures[5]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[6]->mTextureID);
                     break;
             }
             glUniformMatrix4fv(keyframeMVPMatrixHandle, 1, GL_FALSE,
@@ -1008,6 +1025,7 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_initRendering(
     keyframeQuadAspectRatio[BETTER_TOGETHER] = (float)textures[1]->mHeight / (float)textures[1]->mWidth;
     keyframeQuadAspectRatio[ALL_YOU_NEED] = (float)textures[2]->mHeight / (float)textures[2]->mWidth;
     keyframeQuadAspectRatio[STOPMOTION] = (float)textures[3]->mHeight / (float)textures[3]->mWidth;
+    keyframeQuadAspectRatio[LORO] = (float)textures[4]->mHeight / (float)textures[4]->mWidth;
 
 }
 

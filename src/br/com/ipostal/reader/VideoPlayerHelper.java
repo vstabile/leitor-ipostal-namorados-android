@@ -40,6 +40,9 @@ import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.SurfaceTexture;
 import android.os.Build;
+import android.os.Environment;
+
+import java.io.File;
 import java.util.concurrent.locks.ReentrantLock;
 
 /** Helper class for video playback functionality */
@@ -62,6 +65,9 @@ public class VideoPlayerHelper implements OnPreparedListener,
     private int             mSeekPosition               = CURRENT_POSITION;
     private ReentrantLock   mMediaPlayerLock            = null;
     private ReentrantLock   mSurfaceTextureLock         = null;
+    
+    // Check if file is corrupted, if it is, delete it
+    File fileCheck;
 
     // This enum declares the possible states a media can have:
     public enum MEDIA_STATE
@@ -72,7 +78,9 @@ public class VideoPlayerHelper implements OnPreparedListener,
         PLAYING         (3),
         READY           (4),
         NOT_READY       (5),
-        ERROR           (6);
+        ERROR           (6),
+        MISSING_VIDEO	(7),
+        READY_FULLSCREEN(8);
 
         private int type;
         MEDIA_STATE (int i)
@@ -162,25 +170,45 @@ public class VideoPlayerHelper implements OnPreparedListener,
                         {
                             mMediaPlayer = new MediaPlayer();
 
-                            // This example shows how to load the movie from the assets folder of the app
-                            // However, if you would like to load the movie from the sdcard or from a network location
-                            // simply comment the three lines below
-                            AssetFileDescriptor afd = mParentActivity.getAssets().openFd(filename);
-                            mMediaPlayer.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
-                            afd.close();
+                            try{
+	                            // This example shows how to load the movie from the assets folder of the app
+	                            // However, if you would like to load the movie from the sdcard or from a network location
+	                            // simply comment the three lines below
+//	                            AssetFileDescriptor afd = mParentActivity.getAssets().openFd(filename);
+//	                            mMediaPlayer.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+//	                            afd.close();
+                            	
+                            	File file = new File(VideoPlayback.sdCardDir, filename);
+                            	fileCheck = file;
+                                if (file.exists()) {
+	                            	mMediaPlayer.setDataSource(VideoPlayback.sdCardDir + "/" + filename);
+	                            	
+	                            	// Variavel global que sera usada para deletar o video
+	                            	// caso caia no ErrorListener, pois significa que
+	                            	// ela esta corrompida.
+	                            	
+	                            	fileCheck = file;
+	                            	mMediaPlayer.prepareAsync();
+	                                mMediaPlayer.setOnPreparedListener(this);
+	                                mMediaPlayer.setOnBufferingUpdateListener(this);
+	                                mMediaPlayer.setOnCompletionListener(this);
+	                                mMediaPlayer.setOnErrorListener(this);
+	                                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+	                                mMediaPlayer.setSurface(new Surface(mSurfaceTexture));
+	                                canBeOnTexture = true;
+	                                mShouldPlayImmediately = playOnTextureImmediately;
+                                }
+                                
+                                mCurrentState = MEDIA_STATE.READY;
+                            	
+                            } catch (Exception e) {
+                            	// Se cair aqui, provavelmente o arquivo esta corrompido
+                            	// entao deletamos o arquivo, e ele é baixado novamente
+                            	fileCheck.delete();
+                            	mCurrentState = MEDIA_STATE.READY;
+							}
 
-                            // and uncomment this one
-                            // mMediaPlayer.setDataSource("/sdcard/myMovie.m4v");
-
-                            mMediaPlayer.prepareAsync();
-                            mMediaPlayer.setOnPreparedListener(this);
-                            mMediaPlayer.setOnBufferingUpdateListener(this);
-                            mMediaPlayer.setOnCompletionListener(this);
-                            mMediaPlayer.setOnErrorListener(this);
-                            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                            mMediaPlayer.setSurface(new Surface(mSurfaceTexture));
-                            canBeOnTexture = true;
-                            mShouldPlayImmediately = playOnTextureImmediately;
+                            
                         }
                         catch (Exception e)
                         {
@@ -193,13 +221,22 @@ public class VideoPlayerHelper implements OnPreparedListener,
                         }
                     }
                 }
+                // If it's not an ICE CREAM SANDWICH device at least 
                 else
                 {
                     try
                     {
                         // We need to verify that the file exists
-                        AssetFileDescriptor afd = mParentActivity.getAssets().openFd(filename);
-                        afd.close();
+//                        AssetFileDescriptor afd = mParentActivity.getAssets().openFd(filename);
+//                        afd.close();
+                    	
+                    	File file = new File(VideoPlayback.sdCardDir, filename);
+                    	fileCheck = file;
+//                        if (!file.exists()) {
+                        	mCurrentState = MEDIA_STATE.READY;
+                        	mVideoType = MEDIA_TYPE.FULLSCREEN;
+//                        }
+                    	
                     }
                     catch (Exception e)
                     {
@@ -286,6 +323,12 @@ public class VideoPlayerHelper implements OnPreparedListener,
     MEDIA_STATE getStatus()
     {
         return mCurrentState;
+    }
+    
+    /** Return the current MEDIA TYPE of the movie */
+    MEDIA_TYPE getMediaType()
+    {
+        return mVideoType;
     }
 
     /** Returns the width of the video frame */
@@ -777,6 +820,9 @@ public class VideoPlayerHelper implements OnPreparedListener,
                     break;
                 case MediaPlayer.MEDIA_ERROR_UNKNOWN:
                     errorDescription = "Unspecified media player error";
+                    // Se cair aqui, provavelmente o arquivo esta corrompido
+                	// entao deletamos o arquivo, e ele é baixado novamente
+                    fileCheck.delete();
                     break;
                 default:
                     errorDescription = "Unknown error " + what;

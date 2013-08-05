@@ -32,6 +32,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLSurfaceView;
 import android.os.SystemClock;
+import android.util.Log;
 import br.com.ipostal.reader.VideoPlayerHelper.MEDIA_STATE;
 import br.com.ipostal.reader.VideoPlayerHelper.MEDIA_TYPE;
 
@@ -41,7 +42,8 @@ import com.qualcomm.QCAR.QCAR;
 /** The renderer class for the VideoPlayback sample. */
 public class VideoPlaybackRenderer implements GLSurfaceView.Renderer
 {
-    public boolean mIsActive                            = false;
+	public boolean mIsActive                            = false;
+	public boolean mIsDownloading                       = false;
 
     private float[][] mTexCoordTransformationMatrix     = null;
     private VideoPlayerHelper mVideoPlayerHelper[]      = null;
@@ -51,6 +53,8 @@ public class VideoPlaybackRenderer implements GLSurfaceView.Renderer
     private boolean mShouldPlayImmediately[]            = null;
     private long mLostTrackingSince[]                   = null;
     private boolean mLoadRequested[]                    = null;
+    
+    public boolean isLoaded = false;
 
     public VideoPlaybackRenderer() {
 
@@ -137,11 +141,11 @@ public class VideoPlaybackRenderer implements GLSurfaceView.Renderer
                     mCanRequestType[i] = MEDIA_TYPE.ON_TEXTURE_FULLSCREEN;
 
                 // And now check if a load has been requested with the parameters passed from the main activity
-                if (mLoadRequested[i])
-                {
-                    mVideoPlayerHelper[i].load(mMovieName[i], mCanRequestType[i], mShouldPlayImmediately[i], mSeekPosition[i]);
-                    mLoadRequested[i] = false;
-                }
+//                if (mLoadRequested[i])
+//                {
+//                    mVideoPlayerHelper[i].load(mMovieName[i], mCanRequestType[i], mShouldPlayImmediately[i], mSeekPosition[i]);
+//                    mLoadRequested[i] = false;
+//                }
             }
         }
     }
@@ -159,14 +163,14 @@ public class VideoPlaybackRenderer implements GLSurfaceView.Renderer
         // Upon every on pause the movie had to be unloaded to release resources
         // Thus, upon every surface create or surface change this has to be reloaded
         // See: http://developer.android.com/reference/android/media/MediaPlayer.html#release()
-        for (int i = 0; i < VideoPlayback.NUM_TARGETS; i++)
-        {
-            if (mLoadRequested[i] && mVideoPlayerHelper[i] != null)
-            {
-                mVideoPlayerHelper[i].load(mMovieName[i], mCanRequestType[i], mShouldPlayImmediately[i], mSeekPosition[i]);
-                mLoadRequested[i] = false;
-            }
-        }
+//        for (int i = 0; i < VideoPlayback.NUM_TARGETS; i++)
+//        {
+//            if (mLoadRequested[i] && mVideoPlayerHelper[i] != null)
+//            {
+//                mVideoPlayerHelper[i].load(mMovieName[i], mCanRequestType[i], mShouldPlayImmediately[i], mSeekPosition[i]);
+//                mLoadRequested[i] = false;
+//            }
+//        }
     }
 
 
@@ -176,6 +180,9 @@ public class VideoPlaybackRenderer implements GLSurfaceView.Renderer
     /** Called to draw the current frame. */
     public void onDrawFrame(GL10 gl)
     {
+    	if (mIsDownloading)
+    		return;
+    	
         if (!mIsActive)
             return;
 
@@ -209,6 +216,12 @@ public class VideoPlaybackRenderer implements GLSurfaceView.Renderer
             // Ask whether the target is currently being tracked and if so react to it
             if (isTracking(i))
             {
+            	if (mLoadRequested[i]) {
+            		mVideoPlayerHelper[i].load(mMovieName[i], mCanRequestType[i], mShouldPlayImmediately[i], mSeekPosition[i]);
+            		Log.d("LOADED" ,String.valueOf(i));
+            		mLoadRequested[i] = false;
+            	}
+              
                 // If it is tracking reset the timestamp for lost tracking
                 mLostTrackingSince[i] = -1;
             }
@@ -223,8 +236,9 @@ public class VideoPlaybackRenderer implements GLSurfaceView.Renderer
                     // If it's been more than 2 seconds then pause the player
                     if ((SystemClock.uptimeMillis()-mLostTrackingSince[i]) > 2000)
                     {
-                        if (mVideoPlayerHelper[i] != null)
-                            mVideoPlayerHelper[i].pause();
+                        if (mVideoPlayerHelper[i] != null) {
+                        	mVideoPlayerHelper[i].pause();
+                        }
                     }
                 }
             }
