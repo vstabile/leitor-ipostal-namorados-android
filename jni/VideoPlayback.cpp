@@ -1,7 +1,7 @@
 /*==============================================================================
             Copyright (c) 2012-2013 QUALCOMM Austria Research Center GmbH.
             All Rights Reserved.
-            
+
             Qualcomm Confidential and Proprietary
 
 This  Vuforia(TM) sample application in source code form ("Sample Code") for the
@@ -79,7 +79,7 @@ enum MEDIA_STATE {
     ERROR                               =  6
 };
 
-static const int NUM_TARGETS = 7;
+static const int NUM_TARGETS = 11;
 static const int OVER_THE_RAINBOW = 0;
 static const int BETTER_TOGETHER = 1;
 static const int ALL_YOU_NEED = 2;
@@ -87,6 +87,10 @@ static const int STOPMOTION = 3;
 static const int LORO = 4;
 static const int HAPPY_FATHERS_DAY = 5;
 static const int SUPER_HERO = 6;
+static const int DIA_DE_PARABENS = 7;
+static const int COMEMORAR = 8;
+static const int BOLO_ROTATORIO = 9;
+static const int BEBENDO_LEITE = 10;
 
 MEDIA_STATE currentStatus[NUM_TARGETS];
 
@@ -155,6 +159,30 @@ GLfloat videoQuadTextureCoordsTransformedHappyFathersDay[] = {
     0.0f, 1.0f,
 };
 GLfloat videoQuadTextureCoordsTransformedSuperHero[] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f,
+};
+GLfloat videoQuadTextureCoordsTransformedDiaDeParabens[] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f,
+};
+GLfloat videoQuadTextureCoordsTransformedComemorar[] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f,
+};
+GLfloat videoQuadTextureCoordsTransformedBoloRotatorio[] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f,
+};
+GLfloat videoQuadTextureCoordsTransformedBebendoLeite[] = {
     0.0f, 0.0f,
     1.0f, 0.0f,
     1.0f, 1.0f,
@@ -433,7 +461,28 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_setVideoDimensions(JNIEnv *env,
         uvMultMat4f(videoQuadTextureCoordsTransformedSuperHero[2], videoQuadTextureCoordsTransformedSuperHero[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedSuperHero[4], videoQuadTextureCoordsTransformedSuperHero[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedSuperHero[6], videoQuadTextureCoordsTransformedSuperHero[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
+    } else if (target == DIA_DE_PARABENS) {
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDeParabens[0], videoQuadTextureCoordsTransformedDiaDeParabens[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDeParabens[2], videoQuadTextureCoordsTransformedDiaDeParabens[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDeParabens[4], videoQuadTextureCoordsTransformedDiaDeParabens[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDeParabens[6], videoQuadTextureCoordsTransformedDiaDeParabens[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
+    } else if (target == COMEMORAR  ) {
+        uvMultMat4f(videoQuadTextureCoordsTransformedComemorar[0], videoQuadTextureCoordsTransformedComemorar[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedComemorar[2], videoQuadTextureCoordsTransformedComemorar[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedComemorar[4], videoQuadTextureCoordsTransformedComemorar[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedComemorar[6], videoQuadTextureCoordsTransformedComemorar[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
+    } else if (target == BOLO_ROTATORIO) {
+        uvMultMat4f(videoQuadTextureCoordsTransformedBoloRotatorio[0], videoQuadTextureCoordsTransformedBoloRotatorio[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedBoloRotatorio[2], videoQuadTextureCoordsTransformedBoloRotatorio[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedBoloRotatorio[4], videoQuadTextureCoordsTransformedBoloRotatorio[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedBoloRotatorio[6], videoQuadTextureCoordsTransformedBoloRotatorio[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
+    } else if (target == BEBENDO_LEITE) {
+        uvMultMat4f(videoQuadTextureCoordsTransformedBebendoLeite[0], videoQuadTextureCoordsTransformedBebendoLeite[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedBebendoLeite[2], videoQuadTextureCoordsTransformedBebendoLeite[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedBebendoLeite[4], videoQuadTextureCoordsTransformedBebendoLeite[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedBebendoLeite[6], videoQuadTextureCoordsTransformedBebendoLeite[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
     }
+
 
     env->ReleaseFloatArrayElements(textureCoordMatrix, mtx, 0);
 }
@@ -459,10 +508,10 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
     QCAR::Renderer::getInstance().drawVideoBackground();
 
     glEnable(GL_DEPTH_TEST);
-    
-    // We must detect if background reflection is active and adjust the culling direction. 
+
+    // We must detect if background reflection is active and adjust the culling direction.
     // If the reflection is active, this means the post matrix has been reflected as well,
-    // therefore standard counter clockwise face culling will result in "inside out" models. 
+    // therefore standard counter clockwise face culling will result in "inside out" models.
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     if(QCAR::Renderer::getInstance().getVideoBackgroundConfig().mReflection == QCAR::VIDEO_BACKGROUND_REFLECTION_ON)
@@ -470,7 +519,7 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
     else
         glFrontFace(GL_CCW);   //Back camera
 
-   
+
     for (int i=0; i<NUM_TARGETS; i++)
     {
         isTracking[i] = false;
@@ -503,6 +552,14 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             currentTarget=HAPPY_FATHERS_DAY;
         else if (strcmp(imageTarget.getName(), "super_hero") == 0)
             currentTarget=SUPER_HERO;
+        else if (strcmp(imageTarget.getName(), "dia_de_parabens") == 0)
+            currentTarget=DIA_DE_PARABENS;
+        else if (strcmp(imageTarget.getName(), "comemorar") == 0)
+            currentTarget=COMEMORAR;
+        else if (strcmp(imageTarget.getName(), "bolo_rotatorio") == 0)
+            currentTarget=BOLO_ROTATORIO;
+        else if (strcmp(imageTarget.getName(), "bebendo_leite") == 0)
+            currentTarget=BEBENDO_LEITE;
 
         modelViewMatrix[currentTarget] = QCAR::Tool::convertPose2GLMatrix(trackableResult->getPose());
 
@@ -518,7 +575,7 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
 
         // If the movie is ready to start playing or it has reached the end
         // of playback we render the keyframe
-        if ((currentStatus[currentTarget] == READY) || (currentStatus[currentTarget] == REACHED_END) || 
+        if ((currentStatus[currentTarget] == READY) || (currentStatus[currentTarget] == REACHED_END) ||
             (currentStatus[currentTarget] == NOT_READY) || (currentStatus[currentTarget] == ERROR))
         {
             QCAR::Matrix44F modelViewMatrixKeyframe =
@@ -565,7 +622,7 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             glUniformMatrix4fv(keyframeMVPMatrixHandle, 1, GL_FALSE,
                                (GLfloat*)&modelViewProjectionKeyframe.data[0] );
             glUniform1i(keyframeTexSampler2DHandle, 0 /*GL_TEXTURE0*/);
-        
+
             // Render
             glDrawElements(GL_TRIANGLES, NUM_QUAD_INDEX, GL_UNSIGNED_SHORT,
                            (const GLvoid*) &quadIndices[0]);
@@ -622,8 +679,19 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
         	else if (strcmp(imageTarget.getName(), "super_hero") == 0)
                 glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
                                   (const GLvoid*) &videoQuadTextureCoordsTransformedSuperHero[0]);
-
-
+            else if (strcmp(imageTarget.getName(), "dia_de_parabens") == 0)
+                glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
+                                  (const GLvoid*) &videoQuadTextureCoordsTransformedDiaDeParabens[0]);                      
+            else if (strcmp(imageTarget.getName(), "comemorar") == 0)
+                glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
+                                  (const GLvoid*) &videoQuadTextureCoordsTransformedComemorar[0]);
+			else if (strcmp(imageTarget.getName(), "bolo_rotatorio") == 0)
+                glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
+                                  (const GLvoid*) &videoQuadTextureCoordsTransformedBoloRotatorio[0]);
+			else if (strcmp(imageTarget.getName(), "bebendo_leite") == 0)
+                glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
+                                  (const GLvoid*) &videoQuadTextureCoordsTransformedBebendoLeite[0]);
+                                  
             glEnableVertexAttribArray(videoPlaybackVertexHandle);
             glEnableVertexAttribArray(videoPlaybackNormalHandle);
             glEnableVertexAttribArray(videoPlaybackTexCoordHandle);
@@ -707,22 +775,22 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             switch (currentStatus[currentTarget])
             {
                 case READY:
-                    glBindTexture(GL_TEXTURE_2D, textures[7]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[11]->mTextureID);
                     break;
                 case REACHED_END:
-                    glBindTexture(GL_TEXTURE_2D, textures[7]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[11]->mTextureID);
                     break;
                 case PAUSED:
-                    glBindTexture(GL_TEXTURE_2D, textures[7]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[11]->mTextureID);
                     break;
                 case NOT_READY:
-                    glBindTexture(GL_TEXTURE_2D, textures[8]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[12]->mTextureID);
                     break;
                 case ERROR:
-                    glBindTexture(GL_TEXTURE_2D, textures[9]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[13]->mTextureID);
                     break;
                 default:
-                    glBindTexture(GL_TEXTURE_2D, textures[8]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[12]->mTextureID);
                     break;
             }
             glUniformMatrix4fv(keyframeMVPMatrixHandle, 1, GL_FALSE,
@@ -1038,7 +1106,7 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_initRendering(
                                                 "vertexTexCoord");
     videoPlaybackMVPMatrixHandle    = glGetUniformLocation(videoPlaybackShaderID,
                                                 "modelViewProjectionMatrix");
-    videoPlaybackTexSamplerOESHandle = glGetUniformLocation(videoPlaybackShaderID, 
+    videoPlaybackTexSamplerOESHandle = glGetUniformLocation(videoPlaybackShaderID,
                                                 "texSamplerOES");
 
     // This is a simpler shader with regular 2D textures
@@ -1053,7 +1121,7 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_initRendering(
                                                 "vertexTexCoord");
     keyframeMVPMatrixHandle         = glGetUniformLocation(keyframeShaderID,
                                                 "modelViewProjectionMatrix");
-    keyframeTexSampler2DHandle      = glGetUniformLocation(keyframeShaderID, 
+    keyframeTexSampler2DHandle      = glGetUniformLocation(keyframeShaderID,
                                                 "texSampler2D");
 
     keyframeQuadAspectRatio[OVER_THE_RAINBOW] = (float)textures[0]->mHeight / (float)textures[0]->mWidth;
@@ -1063,6 +1131,10 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_initRendering(
     keyframeQuadAspectRatio[LORO] = (float)textures[4]->mHeight / (float)textures[4]->mWidth;
     keyframeQuadAspectRatio[HAPPY_FATHERS_DAY] = (float)textures[5]->mHeight / (float)textures[5]->mWidth;
     keyframeQuadAspectRatio[SUPER_HERO] = (float)textures[6]->mHeight / (float)textures[6]->mWidth;
+    keyframeQuadAspectRatio[DIA_DE_PARABENS] = (float)textures[7]->mHeight / (float)textures[7]->mWidth;
+    keyframeQuadAspectRatio[COMEMORAR] = (float)textures[8]->mHeight / (float)textures[8]->mWidth;
+    keyframeQuadAspectRatio[BOLO_ROTATORIO] = (float)textures[9]->mHeight / (float)textures[9]->mWidth;
+    keyframeQuadAspectRatio[BEBENDO_LEITE] = (float)textures[10]->mHeight / (float)textures[10]->mWidth;
 
 }
 

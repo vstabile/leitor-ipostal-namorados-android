@@ -123,7 +123,7 @@ public class VideoPlayback extends Activity
     private Activity mCurrentActivity                   = null;
 
     // Movie for the Targets:
-    public static final int NUM_TARGETS                 = 7;
+    public static final int NUM_TARGETS                 = 11;
     public static final int OVER_THE_RAINBOW            = 0;
     public static final int BETTER_TOGETHER             = 1;
     public static final int ALL_YOU_NEED                = 2;
@@ -131,6 +131,11 @@ public class VideoPlayback extends Activity
     public static final int LORO                  		= 4;
     public static final int HAPPY_FATHERS_DAY     		= 5;
     public static final int SUPER_HERO           		= 6;
+    public static final int DIA_DE_PARABENS           	= 7;
+    public static final int COMEMORAR           		= 8;
+    public static final int BOLO_ROTATORIO           	= 9;
+    public static final int BEBENDO_LEITE          		= 10;
+    
     private VideoPlayerHelper mVideoPlayerHelper[]      = null;
     private int mSeekPosition[]                         = null;
     private boolean mWasPlaying[]                       = null;
@@ -408,6 +413,10 @@ public class VideoPlayback extends Activity
         mMovieName[LORO] = "loro.mp4";
         mMovieName[HAPPY_FATHERS_DAY] = "happy_fathers_day.mp4";
         mMovieName[SUPER_HERO] = "super_hero.mp4";
+        mMovieName[DIA_DE_PARABENS] = "dia_de_parabens.mp4";
+        mMovieName[COMEMORAR] = "comemorar.mp4";
+        mMovieName[BOLO_ROTATORIO] = "bolo_rotatorio.mp4";
+        mMovieName[BEBENDO_LEITE] = "bebendo_leite.mp4";
 
         mCurrentActivity = this;
 
@@ -446,6 +455,18 @@ public class VideoPlayback extends Activity
 						break;
                     case 6:
 						fileName = "super_hero.mp4";
+						break;
+                    case 7:
+						fileName = "dia_de_parabens.mp4";
+						break;
+                    case 8:
+						fileName = "comemorar.mp4";
+						break;
+                    case 9:
+						fileName = "bolo_rotatorio.mp4";
+						break;
+                    case 10:
+						fileName = "bebendo_leite.mp4";
 						break;
 
 					default:
@@ -535,6 +556,18 @@ public class VideoPlayback extends Activity
     						break;
                         case 6:
     						fileName = "super_hero.mp4";
+    						break;
+                        case 7:
+    						fileName = "dia_de_parabens.mp4";
+    						break;
+                        case 8:
+    						fileName = "comemorar.mp4";
+    						break;
+                        case 9:
+    						fileName = "bolo_rotatorio.mp4";
+    						break;
+                        case 10:
+    						fileName = "bebendo_leite.mp4";
     						break;
 
 
@@ -808,6 +841,14 @@ public class VideoPlayback extends Activity
     	mTextures.add(Texture.loadTextureFromApk("happy_fathers_day.png",
                 getAssets()));
     	mTextures.add(Texture.loadTextureFromApk("super_hero.png",
+                getAssets()));
+    	mTextures.add(Texture.loadTextureFromApk("dia_de_parabens.png",
+                getAssets()));
+    	mTextures.add(Texture.loadTextureFromApk("comemorar.png",
+                getAssets()));
+    	mTextures.add(Texture.loadTextureFromApk("bolo_rotatorio.png",
+                getAssets()));
+    	mTextures.add(Texture.loadTextureFromApk("bebendo_leite.png",
                 getAssets()));
         mTextures.add(Texture.loadTextureFromApk("play.png",
                 getAssets()));

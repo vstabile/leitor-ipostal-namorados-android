@@ -5,8 +5,12 @@
     <ImageTarget name="over_the_rainbow" size="105.000000 148.148148" />
     <ImageTarget name="better_together" size="148.000000 104.894997" />
     <ImageTarget name="stopmotion" size="148.000000 104.894997" />
-    <ImageTarget name="all_you_need" size="105.000000 148.148148" />
     <ImageTarget name="happy_fathers_day" size="105.000000 148.066071" />
+    <ImageTarget name="all_you_need" size="105.000000 148.148148" />
     <ImageTarget name="super_hero" size="105.000000 148.066071" />
+    <ImageTarget name="dia_de_parabens" size="105.000000 148.508286" />
+    <ImageTarget name="comemorar" size="105.000000 148.072189" />
+    <ImageTarget name="bolo_rotatorio" size="148.000000 105.080002" />
+    <ImageTarget name="bebendo_leite" size="105.000000 148.072189" />
   </Tracking>
 </QCARConfig>
