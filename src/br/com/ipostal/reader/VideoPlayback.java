@@ -41,6 +41,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -1290,12 +1292,19 @@ public class VideoPlayback extends Activity
             // Setup a click listener that downloads iPostal
         	mDownloadButton.setOnClickListener(new ImageView.OnClickListener() {
                     public void onClick(View arg0) {
-                    	final String appName = "iPostal";
-                    	try {
-                    	    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+appName)));
-                    	} catch (android.content.ActivityNotFoundException anfe) {
-                    	    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id="+appName)));
-                    	}
+                    	final String appName = "br.com.ipostal";
+                    	if (isMarket(getApplicationContext())){
+                    		try {
+                        	    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+appName)));
+                        	} catch (android.content.ActivityNotFoundException anfe) {
+                        	    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id="+appName)));
+                        	}
+                        } else {
+                            Intent goToAmazonStore = new Intent(Intent.ACTION_VIEW,
+                            		Uri.parse("http://www.amazon.com/gp/mas/dl/android?p=" + appName));
+                            goToAmazonStore.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(goToAmazonStore);
+                        }
                     }
             });
         }
@@ -1565,5 +1574,25 @@ public class VideoPlayback extends Activity
 	    }
 	    return false;
 	}
+    
+    public static boolean isMarket(Context context){
+        int currentSig = 1; // I just set this to 1 to avoid any exceptions later on.
+        try {
+            Signature[] sigs = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES).signatures;
+            for (Signature sig : sigs)
+            {
+                currentSig = sig.hashCode();
+                Log.i("MyApp", "Signature hashcode : " + sig.hashCode());
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        
+        if (currentSig == 401964109){
+            return true;
+        } else {
+            return false;
+        }
+    }
     
 }
