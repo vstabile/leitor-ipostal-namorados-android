@@ -79,7 +79,7 @@ enum MEDIA_STATE {
     ERROR                               =  6
 };
 
-static const int NUM_TARGETS = 11;
+static const int NUM_TARGETS = 12;	/* HERE */
 static const int OVER_THE_RAINBOW = 0;
 static const int BETTER_TOGETHER = 1;
 static const int ALL_YOU_NEED = 2;
@@ -91,6 +91,8 @@ static const int DIA_DE_PARABENS = 7;
 static const int COMEMORAR = 8;
 static const int BOLO_ROTATORIO = 9;
 static const int BEBENDO_LEITE = 10;
+static const int RENA_CANTANDO = 11;
+/* HERE */
 
 MEDIA_STATE currentStatus[NUM_TARGETS];
 
@@ -188,6 +190,13 @@ GLfloat videoQuadTextureCoordsTransformedBebendoLeite[] = {
     1.0f, 1.0f,
     0.0f, 1.0f,
 };
+GLfloat videoQuadTextureCoordsTransformedRenaCantando[] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f,
+};
+/* HERE */
 
 // Screen dimensions:
 unsigned int screenWidth                = 0;
@@ -481,8 +490,13 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_setVideoDimensions(JNIEnv *env,
         uvMultMat4f(videoQuadTextureCoordsTransformedBebendoLeite[2], videoQuadTextureCoordsTransformedBebendoLeite[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedBebendoLeite[4], videoQuadTextureCoordsTransformedBebendoLeite[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedBebendoLeite[6], videoQuadTextureCoordsTransformedBebendoLeite[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
+    } else if (target == RENA_CANTANDO) {
+        uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[0], videoQuadTextureCoordsTransformedRenaCantando[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[2], videoQuadTextureCoordsTransformedRenaCantando[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[4], videoQuadTextureCoordsTransformedRenaCantando[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[6], videoQuadTextureCoordsTransformedRenaCantando[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
     }
-
+    /* HERE */
 
     env->ReleaseFloatArrayElements(textureCoordMatrix, mtx, 0);
 }
@@ -560,6 +574,10 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             currentTarget=BOLO_ROTATORIO;
         else if (strcmp(imageTarget.getName(), "bebendo_leite") == 0)
             currentTarget=BEBENDO_LEITE;
+        else if (strcmp(imageTarget.getName(), "rena_cantando") == 0)
+            currentTarget=RENA_CANTANDO;
+            
+            /* HERE */
 
         modelViewMatrix[currentTarget] = QCAR::Tool::convertPose2GLMatrix(trackableResult->getPose());
 
@@ -691,6 +709,11 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
 			else if (strcmp(imageTarget.getName(), "bebendo_leite") == 0)
                 glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
                                   (const GLvoid*) &videoQuadTextureCoordsTransformedBebendoLeite[0]);
+            else if (strcmp(imageTarget.getName(), "rena_cantando") == 0)
+                glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
+                                  (const GLvoid*) &videoQuadTextureCoordsTransformedRenaCantando[0]);
+                                  
+            /* HERE */
                                   
             glEnableVertexAttribArray(videoPlaybackVertexHandle);
             glEnableVertexAttribArray(videoPlaybackNormalHandle);
@@ -772,19 +795,19 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             // Depending on the status in which we are we choose the appropriate
             // texture to display. Notice that unlike the video these are regular
             // GL_TEXTURE_2D textures
-            switch (currentStatus[currentTarget])
+            switch (currentStatus[currentTarget])		/* HERE */ /* SOMAR NESSES NUMEROS O NUMERO DE IMAGENS ADICIONADAS */
             {
                 case READY:
-                    glBindTexture(GL_TEXTURE_2D, textures[11]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[12]->mTextureID);
                     break;
                 case REACHED_END:
-                    glBindTexture(GL_TEXTURE_2D, textures[11]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[12]->mTextureID);
                     break;
                 case PAUSED:
-                    glBindTexture(GL_TEXTURE_2D, textures[11]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[12]->mTextureID);
                     break;
                 case NOT_READY:
-                    glBindTexture(GL_TEXTURE_2D, textures[12]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[13]->mTextureID);
                     break;
                 case ERROR:
                     glBindTexture(GL_TEXTURE_2D, textures[13]->mTextureID);
@@ -1135,6 +1158,8 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_initRendering(
     keyframeQuadAspectRatio[COMEMORAR] = (float)textures[8]->mHeight / (float)textures[8]->mWidth;
     keyframeQuadAspectRatio[BOLO_ROTATORIO] = (float)textures[9]->mHeight / (float)textures[9]->mWidth;
     keyframeQuadAspectRatio[BEBENDO_LEITE] = (float)textures[10]->mHeight / (float)textures[10]->mWidth;
+    keyframeQuadAspectRatio[RENA_CANTANDO] = (float)textures[11]->mHeight / (float)textures[11]->mWidth;
+    /* HERE */
 
 }
 
