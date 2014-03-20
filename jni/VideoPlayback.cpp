@@ -79,7 +79,7 @@ enum MEDIA_STATE {
     ERROR                               =  6
 };
 
-static const int NUM_TARGETS = 12;	/* HERE */
+static const int NUM_TARGETS = 15;	/* HERE */
 static const int OVER_THE_RAINBOW = 0;
 static const int BETTER_TOGETHER = 1;
 static const int ALL_YOU_NEED = 2;
@@ -92,6 +92,9 @@ static const int COMEMORAR = 8;
 static const int BOLO_ROTATORIO = 9;
 static const int BEBENDO_LEITE = 10;
 static const int RENA_CANTANDO = 11;
+static const int PASCOA = 12;
+static const int DIA_DAS_MAES = 13;
+static const int DIA_DOS_NAMORADOS = 14;
 /* HERE */
 
 MEDIA_STATE currentStatus[NUM_TARGETS];
@@ -191,6 +194,24 @@ GLfloat videoQuadTextureCoordsTransformedBebendoLeite[] = {
     0.0f, 1.0f,
 };
 GLfloat videoQuadTextureCoordsTransformedRenaCantando[] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f,
+};
+GLfloat videoQuadTextureCoordsTransformedPascoa[] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f,
+};
+GLfloat videoQuadTextureCoordsTransformedDiaDasMaes[] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f,
+};
+GLfloat videoQuadTextureCoordsTransformedDiaDosNamorados[] = {
     0.0f, 0.0f,
     1.0f, 0.0f,
     1.0f, 1.0f,
@@ -495,6 +516,21 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_setVideoDimensions(JNIEnv *env,
         uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[2], videoQuadTextureCoordsTransformedRenaCantando[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[4], videoQuadTextureCoordsTransformedRenaCantando[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[6], videoQuadTextureCoordsTransformedRenaCantando[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
+    } else if (target == PASCOA) {
+        uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[0], videoQuadTextureCoordsTransformedPascoa[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedPascoa[2], videoQuadTextureCoordsTransformedPascoa[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedPascoa[4], videoQuadTextureCoordsTransformedPascoa[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedPascoa[6], videoQuadTextureCoordsTransformedPascoa[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
+    } else if (target == DIA_DAS_MAES) {
+        uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[0], videoQuadTextureCoordsTransformedDiaDasMaes[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDasMaes[2], videoQuadTextureCoordsTransformedDiaDasMaes[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDasMaes[4], videoQuadTextureCoordsTransformedDiaDasMaes[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDasMaes[6], videoQuadTextureCoordsTransformedDiaDasMaes[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
+    } else if (target == DIA_DOS_NAMORADOS) {
+        uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[0], videoQuadTextureCoordsTransformedDiaDosNamorados[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDosNamorados[2], videoQuadTextureCoordsTransformedDiaDosNamorados[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDosNamorados[4], videoQuadTextureCoordsTransformedDiaDosNamorados[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDosNamorados[6], videoQuadTextureCoordsTransformedDiaDosNamorados[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
     }
     /* HERE */
 
@@ -576,6 +612,12 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             currentTarget=BEBENDO_LEITE;
         else if (strcmp(imageTarget.getName(), "rena_cantando") == 0)
             currentTarget=RENA_CANTANDO;
+        else if (strcmp(imageTarget.getName(), "pascoa") == 0)
+            currentTarget=PASCOA;
+        else if (strcmp(imageTarget.getName(), "dia_das_maes") == 0)
+            currentTarget=DIA_DAS_MAES;
+        else if (strcmp(imageTarget.getName(), "dia_dos_namorados") == 0)
+            currentTarget=DIA_DOS_NAMORADOS;
             
             /* HERE */
 
@@ -712,6 +754,15 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             else if (strcmp(imageTarget.getName(), "rena_cantando") == 0)
                 glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
                                   (const GLvoid*) &videoQuadTextureCoordsTransformedRenaCantando[0]);
+        	else if (strcmp(imageTarget.getName(), "pascoa") == 0)
+                glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
+                                  (const GLvoid*) &videoQuadTextureCoordsTransformedPascoa[0]);
+            else if (strcmp(imageTarget.getName(), "dia_das_maes") == 0)
+                glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
+                                  (const GLvoid*) &videoQuadTextureCoordsTransformedDiaDasMaes[0]);
+            else if (strcmp(imageTarget.getName(), "dia_dos_namorados") == 0)
+                glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
+                                  (const GLvoid*) &videoQuadTextureCoordsTransformedDiaDosNamorados[0]);
                                   
             /* HERE */
                                   
@@ -798,22 +849,22 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             switch (currentStatus[currentTarget])		/* HERE */ /* SOMAR NESSES NUMEROS O NUMERO DE IMAGENS ADICIONADAS */
             {
                 case READY:
-                    glBindTexture(GL_TEXTURE_2D, textures[12]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[15]->mTextureID);
                     break;
                 case REACHED_END:
-                    glBindTexture(GL_TEXTURE_2D, textures[12]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[15]->mTextureID);
                     break;
                 case PAUSED:
-                    glBindTexture(GL_TEXTURE_2D, textures[12]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[15]->mTextureID);
                     break;
                 case NOT_READY:
-                    glBindTexture(GL_TEXTURE_2D, textures[13]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[16]->mTextureID);
                     break;
                 case ERROR:
-                    glBindTexture(GL_TEXTURE_2D, textures[13]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[16]->mTextureID);
                     break;
                 default:
-                    glBindTexture(GL_TEXTURE_2D, textures[12]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[15]->mTextureID);
                     break;
             }
             glUniformMatrix4fv(keyframeMVPMatrixHandle, 1, GL_FALSE,
@@ -1159,6 +1210,9 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_initRendering(
     keyframeQuadAspectRatio[BOLO_ROTATORIO] = (float)textures[9]->mHeight / (float)textures[9]->mWidth;
     keyframeQuadAspectRatio[BEBENDO_LEITE] = (float)textures[10]->mHeight / (float)textures[10]->mWidth;
     keyframeQuadAspectRatio[RENA_CANTANDO] = (float)textures[11]->mHeight / (float)textures[11]->mWidth;
+    keyframeQuadAspectRatio[PASCOA] = (float)textures[12]->mHeight / (float)textures[12]->mWidth;
+    keyframeQuadAspectRatio[DIA_DAS_MAES] = (float)textures[13]->mHeight / (float)textures[13]->mWidth;
+    keyframeQuadAspectRatio[DIA_DOS_NAMORADOS] = (float)textures[14]->mHeight / (float)textures[14]->mWidth;
     /* HERE */
 
 }

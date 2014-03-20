@@ -124,8 +124,9 @@ public class VideoPlayback extends Activity
     // Pointer to the current activity:
     private Activity mCurrentActivity                   = null;
 
+    // TODO
     // Movie for the Targets:
-    public static final int NUM_TARGETS                 = 12;
+    public static final int NUM_TARGETS                 = 15;
     public static final int OVER_THE_RAINBOW            = 0;
     public static final int BETTER_TOGETHER             = 1;
     public static final int ALL_YOU_NEED                = 2;
@@ -138,6 +139,9 @@ public class VideoPlayback extends Activity
     public static final int BOLO_ROTATORIO           	= 9;
     public static final int BEBENDO_LEITE          		= 10;
     public static final int RENA_CANTANDO          		= 11;
+    public static final int PASCOA          			= 12;
+    public static final int DIA_DAS_MAES          		= 13;
+    public static final int DIA_DOS_NAMORADOS			= 14;
     
     private VideoPlayerHelper mVideoPlayerHelper[]      = null;
     private int mSeekPosition[]                         = null;
@@ -408,7 +412,7 @@ public class VideoPlayback extends Activity
             mVideoPlayerHelper[i].init();
             mVideoPlayerHelper[i].setActivity(this);
         }
-
+        // TODO
         mMovieName[OVER_THE_RAINBOW] = "over_the_rainbow.mp4";
         mMovieName[BETTER_TOGETHER] = "better_together.mp4";
         mMovieName[ALL_YOU_NEED] = "all_you_need.mp4";
@@ -421,6 +425,9 @@ public class VideoPlayback extends Activity
         mMovieName[BOLO_ROTATORIO] = "bolo_rotatorio.mp4";
         mMovieName[BEBENDO_LEITE] = "bebendo_leite.mp4";
         mMovieName[RENA_CANTANDO] = "rena_cantando.mp4";
+        mMovieName[PASCOA] = "pascoa.mp4";
+        mMovieName[DIA_DAS_MAES] = "dia_das_maes.mp4";
+        mMovieName[DIA_DOS_NAMORADOS] = "dia_dos_namorados.mp4";
 
         mCurrentActivity = this;
 
@@ -474,6 +481,15 @@ public class VideoPlayback extends Activity
 						break;
                     case 11:
 						fileName = "rena_cantando.mp4";
+						break;
+                    case 12:
+						fileName = "pascoa.mp4";
+						break;
+                    case 13:
+						fileName = "dia_das_maes.mp4";
+						break;
+                    case 14:
+						fileName = "dia_dos_namorados.mp4";
 						break;
 
 					default:
@@ -579,7 +595,15 @@ public class VideoPlayback extends Activity
                         case 11:
     						fileName = "rena_cantando.mp4";
     						break;
-
+                        case 12:
+    						fileName = "pascoa.mp4";
+    						break;
+                        case 13:
+    						fileName = "dia_das_maes.mp4";
+    						break;
+                        case 14:
+    						fileName = "dia_dos_namorados.mp4";
+    						break;
 
 						default:
 							break;
@@ -648,7 +672,6 @@ public class VideoPlayback extends Activity
                                 
                                 File file = new File(sdCardDir, fileName);
                                 if (file.exists()) {
-                                	// TODO
                                 	// Request the playback in fullscreen:
                                     mVideoPlayerHelper[i].play(true,VideoPlayerHelper.CURRENT_POSITION);
 //                             		mVideoPlayerHelper[i].load( mMovieName[i], MEDIA_TYPE.ON_TEXTURE_FULLSCREEN, true, 0);
@@ -838,6 +861,7 @@ public class VideoPlayback extends Activity
      * use for rendering. */
     private void loadTextures()
     {
+    	// TODO
     	mTextures.add(Texture.loadTextureFromApk("over_the_rainbow.png",
                 getAssets()));
     	mTextures.add(Texture.loadTextureFromApk("better_together.png",
@@ -861,6 +885,12 @@ public class VideoPlayback extends Activity
     	mTextures.add(Texture.loadTextureFromApk("bebendo_leite.png",
                 getAssets()));
     	mTextures.add(Texture.loadTextureFromApk("rena_cantando.png",
+                getAssets()));
+    	mTextures.add(Texture.loadTextureFromApk("pascoa.png",
+                getAssets()));
+    	mTextures.add(Texture.loadTextureFromApk("dia_das_maes.png",
+                getAssets()));
+    	mTextures.add(Texture.loadTextureFromApk("dia_dos_namorados.png",
                 getAssets()));
         mTextures.add(Texture.loadTextureFromApk("play.png",
                 getAssets()));
