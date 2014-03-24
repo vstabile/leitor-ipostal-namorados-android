@@ -711,116 +711,116 @@ public class VideoPlayback extends Activity
         });
     }
     
-    private void getVideoFromAmazon(final String fileName, final int i){
-		
-		new AsyncTask<Void, Void, Boolean>() {
-			
-			protected void onPreExecute() {		
-				progressBar = new ProgressDialog(VideoPlayback.this);
-	            progressBar.setMessage(getString(R.string.downloading_video));
-	            progressBar.setIndeterminate(false);
-	            progressBar.setMax(100);
-	            progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-	            progressBar.setCancelable(true);
-	            progressBar.show();
-	            	            
-	            WindowManager.LayoutParams lp = progressBar.getWindow().getAttributes();  
-	            lp.dimAmount = 1.0f; // Dim level. 0.0 - no dim, 1.0 - completely opaque
-	            progressBar.getWindow().setAttributes(lp);
-	            	           
-	            Handler handler = new Handler(); 
-	            handler.postDelayed(new Runnable() { 
-	                 public void run() { 
-	                	 mRenderer.mIsDownloading = true;
-	                 } 
-	            }, 2000); 
-			}
-			
-			@Override
-			protected Boolean doInBackground(Void... params) {
-				Boolean success = false;
-				try {
-					  
-              	  AmazonS3Client s3Client = new AmazonS3Client(new BasicAWSCredentials(
-            				Constants.AWS_ACCESS_KEY_ID, Constants.AWS_SECRET_ACCESS_KEY));
-              	  s3Client.setEndpoint(Constants.AWS_ENDPOINT);
-              	  
-              	  Log.d("fileName", fileName);
-              	  File dir = new File(sdCardDir); 
-              	  dir.mkdirs();
-              	  File file = new File(sdCardDir, fileName); 
-            	  file.createNewFile();
-            	  
-            	// Zera a progressBar
-   				  progressBarHandler.post(new Runnable() {
-   					public void run() {
-   						progressBar.setProgress(0);
-   					}
-				  });
-            	  
-            	  ProgressListener listener = new ProgressListener() {
-              		  float total = 0;
-              		  float progress = 0;
-              		  
-				      @Override
-				      public void progressChanged(ProgressEvent pv) {
-				    	  total += (int) pv.getBytesTransfered();
-				    	  // o 140000 é o total de bytes do arquivo hardcoded
-		                     progress = (total / 140000) * 100;
-		                     
-		                     // Update the progress bar
-			   				  progressBarHandler.post(new Runnable() {
-			   					public void run() {
-			   						Log.d("PROGRESS", String.valueOf(progress));
-			   						progressBar.setProgress((int) progress);
-			   					}
-							  });
-				      }
-				
-				  };
-            	  
-            	  GetObjectRequest objReq = new GetObjectRequest(Constants.AWS_PICTURE_BUCKET,
-                			"production/" + fileName);
-            	  
-            	  objReq.setProgressListener(listener);
-              	  
-            	  ObjectMetadata object = s3Client.getObject(objReq, file);
-            	  
-//            	  S3Object object = s3Client.getObject(new GetObjectRequest(Constants.AWS_PICTURE_BUCKET,
-//                			"production/" + fileName));
-              	  
-              	  success = true;
-              	  
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				return success;
-			}
-			
-			protected void onPostExecute(Boolean success) {
-//				progressBar.dismiss();		
-				
-				mRenderer.mIsDownloading = false;
-				
-				if (progressBar != null)
-				{
-					progressBar.dismiss();
-					progressBar = null;
-				}
-				
-				if (success) {
-					Log.d("DOWNLOAD AWS", "success");
-					mVideoPlayerHelper[i].load( mMovieName[i], MEDIA_TYPE.ON_TEXTURE, true, 0);
-				} else {
-					Log.d("DOWNLOAD AWS", "fail");
-					mVideoPlayerHelper[i].load( mMovieName[i], MEDIA_TYPE.ON_TEXTURE, true, 0);
-				}
-			}
-			
-		}.execute();
-		
-	}
+//    private void getVideoFromAmazon(final String fileName, final int i){
+//		
+//		new AsyncTask<Void, Void, Boolean>() {
+//			
+//			protected void onPreExecute() {		
+//				progressBar = new ProgressDialog(VideoPlayback.this);
+//	            progressBar.setMessage(getString(R.string.downloading_video));
+//	            progressBar.setIndeterminate(false);
+//	            progressBar.setMax(100);
+//	            progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+//	            progressBar.setCancelable(true);
+//	            progressBar.show();
+//	            	            
+//	            WindowManager.LayoutParams lp = progressBar.getWindow().getAttributes();  
+//	            lp.dimAmount = 1.0f; // Dim level. 0.0 - no dim, 1.0 - completely opaque
+//	            progressBar.getWindow().setAttributes(lp);
+//	            	           
+//	            Handler handler = new Handler(); 
+//	            handler.postDelayed(new Runnable() { 
+//	                 public void run() { 
+//	                	 mRenderer.mIsDownloading = true;
+//	                 } 
+//	            }, 2000); 
+//			}
+//			
+//			@Override
+//			protected Boolean doInBackground(Void... params) {
+//				Boolean success = false;
+//				try {
+//					  
+//              	  AmazonS3Client s3Client = new AmazonS3Client(new BasicAWSCredentials(
+//            				Constants.AWS_ACCESS_KEY_ID, Constants.AWS_SECRET_ACCESS_KEY));
+//              	  s3Client.setEndpoint(Constants.AWS_ENDPOINT);
+//              	  
+//              	  Log.d("fileName", fileName);
+//              	  File dir = new File(sdCardDir); 
+//              	  dir.mkdirs();
+//              	  File file = new File(sdCardDir, fileName); 
+//            	  file.createNewFile();
+//            	  
+//            	// Zera a progressBar
+//   				  progressBarHandler.post(new Runnable() {
+//   					public void run() {
+//   						progressBar.setProgress(0);
+//   					}
+//				  });
+//            	  
+//            	  ProgressListener listener = new ProgressListener() {
+//              		  float total = 0;
+//              		  float progress = 0;
+//              		  
+//				      @Override
+//				      public void progressChanged(ProgressEvent pv) {
+//				    	  total += (int) pv.getBytesTransfered();
+//				    	  // o 140000 é o total de bytes do arquivo hardcoded
+//		                     progress = (total / 140000) * 100;
+//		                     
+//		                     // Update the progress bar
+//			   				  progressBarHandler.post(new Runnable() {
+//			   					public void run() {
+//			   						Log.d("PROGRESS", String.valueOf(progress));
+//			   						progressBar.setProgress((int) progress);
+//			   					}
+//							  });
+//				      }
+//				
+//				  };
+//            	  
+//            	  GetObjectRequest objReq = new GetObjectRequest(Constants.AWS_PICTURE_BUCKET,
+//                			"production/" + fileName);
+//            	  
+//            	  objReq.setProgressListener(listener);
+//              	  
+//            	  ObjectMetadata object = s3Client.getObject(objReq, file);
+//            	  
+////            	  S3Object object = s3Client.getObject(new GetObjectRequest(Constants.AWS_PICTURE_BUCKET,
+////                			"production/" + fileName));
+//              	  
+//              	  success = true;
+//              	  
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//				
+//				return success;
+//			}
+//			
+//			protected void onPostExecute(Boolean success) {
+////				progressBar.dismiss();		
+//				
+//				mRenderer.mIsDownloading = false;
+//				
+//				if (progressBar != null)
+//				{
+//					progressBar.dismiss();
+//					progressBar = null;
+//				}
+//				
+//				if (success) {
+//					Log.d("DOWNLOAD AWS", "success");
+//					mVideoPlayerHelper[i].load( mMovieName[i], MEDIA_TYPE.ON_TEXTURE, true, 0);
+//				} else {
+//					Log.d("DOWNLOAD AWS", "fail");
+//					mVideoPlayerHelper[i].load( mMovieName[i], MEDIA_TYPE.ON_TEXTURE, true, 0);
+//				}
+//			}
+//			
+//		}.execute();
+//		
+//	}
     
         /**
          * Updating progress bar
