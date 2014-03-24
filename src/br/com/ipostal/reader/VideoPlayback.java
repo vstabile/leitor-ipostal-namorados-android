@@ -67,12 +67,6 @@ import android.widget.Toast;
 import br.com.ipostal.reader.VideoPlayerHelper.MEDIA_STATE;
 import br.com.ipostal.reader.VideoPlayerHelper.MEDIA_TYPE;
 
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.ProgressEvent;
-import com.amazonaws.services.s3.model.ProgressListener;
 import com.qualcomm.QCAR.QCAR;
 
 /** The AR activity for the VideoPlayback sample. */
