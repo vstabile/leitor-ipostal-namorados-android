@@ -71,15 +71,7 @@ import com.qualcomm.QCAR.QCAR;
 
 /** The AR activity for the VideoPlayback sample. */
 public class VideoPlayback extends Activity
-{
-	// Menu item string constants:
-    private static final String MENU_ITEM_ACTIVATE_CONT_AUTO_FOCUS =
-        "Activate Cont. Auto Focus";
-    private static final String MENU_ITEM_DEACTIVATE_CONT_AUTO_FOCUS =
-        "Deactivate Cont. Auto Focus";
-    private static final String MENU_ITEM_TRIGGER_AUTO_FOCUS = 
-    		"Trigger Auto Focus";
-    
+{    
     // SDCard location
     public static final String sdCardDir = Environment.getExternalStorageDirectory().toString() + "/iPostal";
     
@@ -1487,11 +1479,11 @@ public class VideoPlayback extends Activity
         menu.clear();
 
         if(mFocusMode == FOCUS_MODE_CONTINUOUS_AUTO)
-            menu.add(MENU_ITEM_DEACTIVATE_CONT_AUTO_FOCUS);
+            menu.add(getString(R.string.deact_continuous_focus));
         else
-            menu.add(MENU_ITEM_ACTIVATE_CONT_AUTO_FOCUS);
+            menu.add(getString(R.string.act_continuous_focus));
 
-        menu.add(MENU_ITEM_TRIGGER_AUTO_FOCUS);
+        menu.add(getString(R.string.trigger_auto_focus));
 
         return true;
     }
@@ -1499,12 +1491,12 @@ public class VideoPlayback extends Activity
     /** Invoked when the user selects an item from the Menu */
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        if(item.getTitle().equals(MENU_ITEM_ACTIVATE_CONT_AUTO_FOCUS))
+        if(item.getTitle().equals(getString(R.string.act_continuous_focus)))
         {
             if(setFocusMode(FOCUS_MODE_CONTINUOUS_AUTO))
             {
                 mFocusMode = FOCUS_MODE_CONTINUOUS_AUTO;
-                item.setTitle(MENU_ITEM_DEACTIVATE_CONT_AUTO_FOCUS);
+                item.setTitle(getString(R.string.deact_continuous_focus));
             }
             else
             {
@@ -1516,12 +1508,12 @@ public class VideoPlayback extends Activity
                 ).show();
             }
         }
-        else if(item.getTitle().equals(MENU_ITEM_DEACTIVATE_CONT_AUTO_FOCUS))
+        else if(item.getTitle().equals(getString(R.string.deact_continuous_focus)))
         {
             if(setFocusMode(FOCUS_MODE_NORMAL))
             {
                 mFocusMode = FOCUS_MODE_NORMAL;
-                item.setTitle(MENU_ITEM_ACTIVATE_CONT_AUTO_FOCUS);
+                item.setTitle(getString(R.string.act_continuous_focus));
             }
             else
             {
@@ -1533,7 +1525,7 @@ public class VideoPlayback extends Activity
                 ).show();
             }
         }
-        else if(item.getTitle().equals(MENU_ITEM_TRIGGER_AUTO_FOCUS))
+        else if(item.getTitle().equals(getString(R.string.trigger_auto_focus)))
         {
             boolean result = autofocus();
             
