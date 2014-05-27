@@ -543,6 +543,12 @@ public class FullscreenPlayback extends Activity implements
             {
                 return true;
             }
+
+			@Override
+			public int getAudioSessionId() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
         };
 
     public void onVideoSizeChanged(MediaPlayer mp, int width, int height)

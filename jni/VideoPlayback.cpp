@@ -79,7 +79,7 @@ enum MEDIA_STATE {
     ERROR                               =  6
 };
 
-static const int NUM_TARGETS = 15;	/* HERE */
+static const int NUM_TARGETS = 17;	/* HERE */
 static const int OVER_THE_RAINBOW = 0;
 static const int BETTER_TOGETHER = 1;
 static const int ALL_YOU_NEED = 2;
@@ -95,6 +95,8 @@ static const int RENA_CANTANDO = 11;
 static const int PASCOA = 12;
 static const int DIA_DAS_MAES = 13;
 static const int DIA_DOS_NAMORADOS = 14;
+static const int HEART = 15;
+static const int DINOSSAURO = 16;
 /* HERE */
 
 MEDIA_STATE currentStatus[NUM_TARGETS];
@@ -517,16 +519,26 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_setVideoDimensions(JNIEnv *env,
         uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[4], videoQuadTextureCoordsTransformedRenaCantando[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[6], videoQuadTextureCoordsTransformedRenaCantando[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
     } else if (target == PASCOA) {
-        uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[0], videoQuadTextureCoordsTransformedPascoa[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedPascoa[0], videoQuadTextureCoordsTransformedPascoa[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedPascoa[2], videoQuadTextureCoordsTransformedPascoa[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedPascoa[4], videoQuadTextureCoordsTransformedPascoa[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedPascoa[6], videoQuadTextureCoordsTransformedPascoa[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
     } else if (target == DIA_DAS_MAES) {
-        uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[0], videoQuadTextureCoordsTransformedDiaDasMaes[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDasMaes[0], videoQuadTextureCoordsTransformedDiaDasMaes[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedDiaDasMaes[2], videoQuadTextureCoordsTransformedDiaDasMaes[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedDiaDasMaes[4], videoQuadTextureCoordsTransformedDiaDasMaes[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedDiaDasMaes[6], videoQuadTextureCoordsTransformedDiaDasMaes[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
     } else if (target == DIA_DOS_NAMORADOS) {
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDosNamorados[0], videoQuadTextureCoordsTransformedDiaDosNamorados[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDosNamorados[2], videoQuadTextureCoordsTransformedDiaDosNamorados[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDosNamorados[4], videoQuadTextureCoordsTransformedDiaDosNamorados[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDosNamorados[6], videoQuadTextureCoordsTransformedDiaDosNamorados[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
+    } else if (target == HEART) {
+        uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[0], videoQuadTextureCoordsTransformedDiaDosNamorados[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDosNamorados[2], videoQuadTextureCoordsTransformedDiaDosNamorados[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDosNamorados[4], videoQuadTextureCoordsTransformedDiaDosNamorados[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
+        uvMultMat4f(videoQuadTextureCoordsTransformedDiaDosNamorados[6], videoQuadTextureCoordsTransformedDiaDosNamorados[7], videoQuadTextureCoords[6], videoQuadTextureCoords[7], mtx);
+    } else if (target == DINOSSAURO) {
         uvMultMat4f(videoQuadTextureCoordsTransformedRenaCantando[0], videoQuadTextureCoordsTransformedDiaDosNamorados[1], videoQuadTextureCoords[0], videoQuadTextureCoords[1], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedDiaDosNamorados[2], videoQuadTextureCoordsTransformedDiaDosNamorados[3], videoQuadTextureCoords[2], videoQuadTextureCoords[3], mtx);
         uvMultMat4f(videoQuadTextureCoordsTransformedDiaDosNamorados[4], videoQuadTextureCoordsTransformedDiaDosNamorados[5], videoQuadTextureCoords[4], videoQuadTextureCoords[5], mtx);
@@ -618,6 +630,10 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             currentTarget=DIA_DAS_MAES;
         else if (strcmp(imageTarget.getName(), "dia_dos_namorados") == 0)
             currentTarget=DIA_DOS_NAMORADOS;
+		else if (strcmp(imageTarget.getName(), "heart") == 0)
+            currentTarget=HEART;
+		else if (strcmp(imageTarget.getName(), "dinossauro") == 0)
+            currentTarget=DINOSSAURO;
             
             /* HERE */
 
@@ -763,6 +779,12 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             else if (strcmp(imageTarget.getName(), "dia_dos_namorados") == 0)
                 glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
                                   (const GLvoid*) &videoQuadTextureCoordsTransformedDiaDosNamorados[0]);
+			else if (strcmp(imageTarget.getName(), "heart") == 0)
+                glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
+                                  (const GLvoid*) &videoQuadTextureCoordsTransformedDiaDosNamorados[0]);
+			else if (strcmp(imageTarget.getName(), "dinossauro") == 0)
+                glVertexAttribPointer(videoPlaybackTexCoordHandle, 2, GL_FLOAT, GL_FALSE, 0,
+                                  (const GLvoid*) &videoQuadTextureCoordsTransformedDiaDosNamorados[0]);
                                   
             /* HERE */
                                   
@@ -849,22 +871,22 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_renderFrame(JNIEnv *, jobject)
             switch (currentStatus[currentTarget])		/* HERE */ /* SOMAR NESSES NUMEROS O NUMERO DE IMAGENS ADICIONADAS */
             {
                 case READY:
-                    glBindTexture(GL_TEXTURE_2D, textures[15]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[17]->mTextureID);
                     break;
                 case REACHED_END:
-                    glBindTexture(GL_TEXTURE_2D, textures[15]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[17]->mTextureID);
                     break;
                 case PAUSED:
-                    glBindTexture(GL_TEXTURE_2D, textures[15]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[17]->mTextureID);
                     break;
                 case NOT_READY:
-                    glBindTexture(GL_TEXTURE_2D, textures[16]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[18]->mTextureID);
                     break;
                 case ERROR:
-                    glBindTexture(GL_TEXTURE_2D, textures[16]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[18]->mTextureID);
                     break;
                 default:
-                    glBindTexture(GL_TEXTURE_2D, textures[15]->mTextureID);
+                    glBindTexture(GL_TEXTURE_2D, textures[17]->mTextureID);
                     break;
             }
             glUniformMatrix4fv(keyframeMVPMatrixHandle, 1, GL_FALSE,
@@ -1213,7 +1235,9 @@ Java_br_com_ipostal_reader_VideoPlaybackRenderer_initRendering(
     keyframeQuadAspectRatio[PASCOA] = (float)textures[12]->mHeight / (float)textures[12]->mWidth;
     keyframeQuadAspectRatio[DIA_DAS_MAES] = (float)textures[13]->mHeight / (float)textures[13]->mWidth;
     keyframeQuadAspectRatio[DIA_DOS_NAMORADOS] = (float)textures[14]->mHeight / (float)textures[14]->mWidth;
-    /* HERE */
+	keyframeQuadAspectRatio[HEART] = (float)textures[15]->mHeight / (float)textures[15]->mWidth;
+	keyframeQuadAspectRatio[DINOSSAURO] = (float)textures[16]->mHeight / (float)textures[16]->mWidth;
+    /* HERE */					/* aumentar os numeros	  /\							 /\*/
 
 }
 

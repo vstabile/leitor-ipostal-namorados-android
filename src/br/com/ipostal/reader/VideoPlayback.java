@@ -112,7 +112,7 @@ public class VideoPlayback extends Activity
 
     // TODO
     // Movie for the Targets:
-    public static final int NUM_TARGETS                 = 15;
+    public static final int NUM_TARGETS                 = 17;
     public static final int OVER_THE_RAINBOW            = 0;
     public static final int BETTER_TOGETHER             = 1;
     public static final int ALL_YOU_NEED                = 2;
@@ -128,6 +128,8 @@ public class VideoPlayback extends Activity
     public static final int PASCOA          			= 12;
     public static final int DIA_DAS_MAES          		= 13;
     public static final int DIA_DOS_NAMORADOS			= 14;
+    public static final int HEART						= 15;
+    public static final int DINOSSAURO					= 16;
     
     private VideoPlayerHelper mVideoPlayerHelper[]      = null;
     private int mSeekPosition[]                         = null;
@@ -414,6 +416,8 @@ public class VideoPlayback extends Activity
         mMovieName[PASCOA] = "pascoa.mp4";
         mMovieName[DIA_DAS_MAES] = "dia_das_maes.mp4";
         mMovieName[DIA_DOS_NAMORADOS] = "dia_dos_namorados.mp4";
+        mMovieName[HEART] = "heart.mp4";
+        mMovieName[DINOSSAURO] = "dinossauro.mp4";
 
         mCurrentActivity = this;
 
@@ -477,7 +481,12 @@ public class VideoPlayback extends Activity
                     case 14:
 						fileName = "dia_dos_namorados.mp4";
 						break;
-
+                    case 15:
+                    	fileName = "heart.mp4";
+                    	break;
+                    case 16:
+                    	fileName = "dinossauro.mp4";
+                    	break;
 					default:
 						break;
 					}
@@ -590,13 +599,18 @@ public class VideoPlayback extends Activity
                         case 14:
     						fileName = "dia_dos_namorados.mp4";
     						break;
+                        case 15:
+                        	fileName = "heart.mp4";
+                        	break;
+                        case 16:
+                        	fileName = "dinossauro.mp4";
+                        	break;
 
 						default:
 							break;
 						}
                     	
                         // Check if it is playable on texture
-                        // TODO
 //                      if (mVideoPlayerHelper[i].isPlayableOnTexture())
                     	if ((mVideoPlayerHelper[i].isPlayableOnTexture() || mVideoPlayerHelper[i].getStatus() == MEDIA_STATE.READY)
                     			&& mVideoPlayerHelper[i].getMediaType() != MEDIA_TYPE.FULLSCREEN)
@@ -877,6 +891,10 @@ public class VideoPlayback extends Activity
     	mTextures.add(Texture.loadTextureFromApk("dia_das_maes.png",
                 getAssets()));
     	mTextures.add(Texture.loadTextureFromApk("dia_dos_namorados.png",
+                getAssets()));
+    	mTextures.add(Texture.loadTextureFromApk("heart.png",
+                getAssets()));
+    	mTextures.add(Texture.loadTextureFromApk("dinossauro.png",
                 getAssets()));
         mTextures.add(Texture.loadTextureFromApk("play.png",
                 getAssets()));
