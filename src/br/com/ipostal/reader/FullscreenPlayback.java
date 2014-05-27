@@ -36,7 +36,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -544,7 +543,6 @@ public class FullscreenPlayback extends Activity implements
                 return true;
             }
 
-			@Override
 			public int getAudioSessionId() {
 				// TODO Auto-generated method stub
 				return 0;

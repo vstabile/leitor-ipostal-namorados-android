@@ -27,23 +27,21 @@ then you may not retain or use any of the Sample Code in any manner.
 
 package br.com.ipostal.reader;
 
+import java.io.File;
+import java.util.concurrent.locks.ReentrantLock;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
-import android.view.Surface;
-import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
-import android.graphics.SurfaceTexture;
 import android.os.Build;
-import android.os.Environment;
-
-import java.io.File;
-import java.util.concurrent.locks.ReentrantLock;
+import android.view.Surface;
 
 /** Helper class for video playback functionality */
 public class VideoPlayerHelper implements OnPreparedListener,
@@ -203,7 +201,7 @@ public class VideoPlayerHelper implements OnPreparedListener,
                             	
                             } catch (Exception e) {
                             	// Se cair aqui, provavelmente o arquivo esta corrompido
-                            	// entao deletamos o arquivo, e ele é baixado novamente
+                            	// entao deletamos o arquivo, e ele ï¿½ baixado novamente
                             	fileCheck.delete();
                             	mCurrentState = MEDIA_STATE.READY;
 							}
@@ -821,7 +819,7 @@ public class VideoPlayerHelper implements OnPreparedListener,
                 case MediaPlayer.MEDIA_ERROR_UNKNOWN:
                     errorDescription = "Unspecified media player error";
                     // Se cair aqui, provavelmente o arquivo esta corrompido
-                	// entao deletamos o arquivo, e ele é baixado novamente
+                	// entao deletamos o arquivo, e ele ï¿½ baixado novamente
                     fileCheck.delete();
                     break;
                 default:
